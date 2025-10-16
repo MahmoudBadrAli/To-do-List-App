@@ -42,7 +42,7 @@ npm run dev
 
 Then open your browser and visit: http://localhost:5173
 
-🧩 Build for Production
+# 🧩 Build for Production
 
 To create an optimized build ready for deployment:
 
@@ -52,7 +52,7 @@ This will generate a dist/ folder containing the production files.
 
 ---
 
-🌍 Deployment
+## 🌍 Deployment
 
 This project is automatically deployed using Netlify.
 Every push to the main branch triggers a new deployment.
@@ -67,12 +67,11 @@ Every push to the main branch triggers a new deployment.
 
 ---
 
-## 📚 Learning Resources  
-This project was built using knowledge from the following high-quality resources fron Elzero Web School on YouTube take a look:
+## 📚 Learning Resources
+This project was built using knowledge from the following high-quality resource:
 
-[![HTML Tutorial](https://img.icons8.com/color/48/000000/html-5.png)](https://www.youtube.com/watch?v=6QAELgirvjs&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji)
-[![CSS Tutorial](https://img.icons8.com/color/48/000000/css3.png)](https://www.youtube.com/watch?v=X1ulCwyhCVM&list=PLDoPjvoNmBAzjsz06gkzlSrlev53MGIKe)
-[![JS Tutorial](https://img.icons8.com/color/48/000000/javascript.png)](https://www.youtube.com/watch?v=MAauLwSHO6Y&list=PLDoPjvoNmBAx3kiplQR_oeDqLDBUDYwVv)
+[![React JS](https://img.icons8.com/color/48/000000/react-native.png)](https://www.youtube.com/watch?v=ihRRf3EjTV8&list=PLYyqC4bNbCIdSZ-JayMLl4WO2Cr995vyS)  
+🎓 **React JS Course** by [Akaademyat Tarmiz (أكاديمية ترميز)](https://www.youtube.com/@AkaademyatTarmiz)
 
 ---
 
