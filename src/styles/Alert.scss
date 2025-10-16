@@ -1,0 +1,19 @@
+@import "mixins-vars-fonts";
+
+.alert {
+  background-color: #4caf50;
+  color: white;
+  @include flex-center;
+  gap: 5px;
+  width: fit-content;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  position: fixed;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, -50%);
+  transition: 0.3s ease;
+  z-index: 1000;
+}

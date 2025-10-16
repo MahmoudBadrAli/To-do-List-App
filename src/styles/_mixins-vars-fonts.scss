@@ -1,0 +1,104 @@
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-Thin.ttf");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-ExtraLight.ttf");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-Regular.ttf");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-ExtraBold.ttf");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("/public/fonts/RobotoSlab-Black.ttf");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: Quicksand;
+  src: url("/public/fonts/Quicksand-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Quicksand;
+  src: url("/public/fonts/Quicksand-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Quicksand;
+  src: url("/public/fonts/Quicksand-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Quicksand;
+  src: url("/public/fonts/Quicksand-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Quicksand;
+  src: url("/public/fonts/Quicksand-Bold.ttf");
+  font-weight: 700;
+}
+
+$main-color: #283593;
+$primary-color: #1a237e;
+$blue: #0277bd;
+$green: #2e7d32;
+$red: #b71c1c;
+$active-red: #d50000;
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin solid-border($px, $color) {
+  border: $px solid $color;
+}

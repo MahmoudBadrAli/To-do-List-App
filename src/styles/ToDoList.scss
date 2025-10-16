@@ -1,0 +1,87 @@
+@import "mixins-vars-fonts";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  padding: 15px 20px;
+  min-width: 550px;
+  max-height: 85vh;
+  overflow: scroll;
+  overflow-x: hidden;
+  h1 {
+    font-weight: 400;
+  }
+  hr {
+    @include solid-border(1px, #ddd);
+    margin: 20px 0;
+  }
+  .filter {
+    @include flex-center;
+    margin-bottom: 20px;
+    span {
+      color: gray;
+      font-size: 17px;
+      font-weight: 600;
+      padding: 5px 10px;
+      @include solid-border(1px, #ddd);
+      cursor: pointer;
+      transition: 0.3s ease;
+      &:hover,
+      &.active {
+        background-color: #eee;
+        color: $main-color;
+      }
+      &:nth-child(1) {
+        border-radius: 6px 0 0 6px;
+      }
+      &:nth-child(2) {
+        border-radius: 0;
+      }
+      &:nth-child(3) {
+        border-radius: 0 6px 6px 0;
+      }
+    }
+  }
+  .add-task {
+    @include flex-column;
+    gap: 15px;
+    .top {
+      display: inline-flex;
+    }
+    .bottom {
+      display: block;
+      div {
+        div {
+          margin: 0;
+        }
+      }
+    }
+    button {
+      background-color: $main-color;
+      pointer-events: auto;
+      font-size: 16px;
+      transition: all 0.3s;
+      &.disabled {
+        background-color: gray;
+        pointer-events: none;
+      }
+      &:hover {
+        background-color: $primary-color;
+      }
+    }
+    div:nth-of-type(2) {
+      flex: 1;
+    }
+    div {
+      height: 56px;
+      margin-right: 0px;
+    }
+  }
+}

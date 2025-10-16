@@ -1,0 +1,80 @@
+@import "mixins-vars-fonts";
+
+.task {
+  background-color: $main-color;
+  color: white;
+  border-radius: 6px;
+  @include flex-center;
+  padding: 12px 10px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+  max-width: 550px;
+  &:hover {
+    box-shadow: 0 7px 7px rgba(0, 0, 0, 0.4);
+  }
+  .task-title {
+    font-size: 20px;
+    text-align: left;
+    flex: 1;
+    font-family: Quicksand;
+    .title {
+      font-weight: 500;
+      display: block;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-width: 90%;
+    }
+    .details {
+      font-size: 18px;
+      color: #ccc;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-width: 90%;
+    }
+  }
+  .task-actions {
+    @include flex-center;
+    gap: 5px;
+  }
+  .task-actions svg {
+    background-color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 6px;
+    transition: 0.3s;
+    &:hover {
+      background-color: #c5c5c5 !important;
+      box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.4);
+    }
+  }
+  .task-actions svg:nth-child(1) {
+    color: $green;
+    @include solid-border(2px, $green);
+  }
+  .task-actions svg:nth-child(2) {
+    color: $active-red;
+    @include solid-border(2px, $active-red);
+  }
+  .task-actions svg:nth-child(3) {
+    color: $blue;
+    @include solid-border(2px, $blue);
+  }
+  .task-actions svg:nth-child(4) {
+    color: $red;
+    @include solid-border(2px, $red);
+  }
+}
