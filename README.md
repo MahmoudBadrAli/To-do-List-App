@@ -71,7 +71,7 @@ Every push to the main branch triggers a new deployment.
 This project was built using knowledge from the following high-quality resource:
 
 [![React JS](https://img.icons8.com/color/48/000000/react-native.png)](https://www.youtube.com/watch?v=ihRRf3EjTV8&list=PLYyqC4bNbCIdSZ-JayMLl4WO2Cr995vyS)  
-🎓 **React JS Course** by [Akaademyat Tarmiz (أكاديمية ترميز)](https://www.youtube.com/@AkaademyatTarmiz)
+🎓 **React JS Course** by [Akaademyat Tarmiz (أكاديمية ترميز)](https://www.youtube.com/@tarmeez)
 
 ---
 
