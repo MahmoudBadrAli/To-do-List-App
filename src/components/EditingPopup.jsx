@@ -34,6 +34,13 @@ export default function EditingPopup({
     return () => clearTimeout(timer);
   }, [isVisible]);
 
+  useEffect(() => {
+    setInfo({
+      title: title,
+      details: details,
+    });
+  }, [title, details]);
+
   function handleClose() {
     setIsOpened(false);
     setTimeout(() => onClose(), 300);

@@ -1,5 +1,6 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect, useMemo, useRef } from "react";
 import { TodosContext } from "../contexts/TodosContext";
+import { useToast } from "../contexts/ToastContext";
 
 import "../styles/ToDoList.scss";
 
@@ -22,6 +23,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import { v4 as uuidv4 } from "uuid";
 
+import DeletingPopup from "./DeletingPopup";
+import EditingPopup from "./EditingPopup";
+
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -36,19 +40,19 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 
 export default function ToDoList() {
   const theme = useTheme();
-
   const { tasks, setTasks } = useContext(TodosContext);
-
+  const { showHideToast } = useToast();
   const [formInputs, setFormInputs] = useState({
     taskTitle: "",
     taskDetails: "",
   });
-
   const [activeFilter, setActiveFilter] = useState(
     JSON.parse(localStorage.getItem("filter")) || "all"
   );
-
   const detailsInputRef = useRef(null);
+  const [popupTodo, setPopupTodo] = useState(null);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("filter", JSON.stringify(activeFilter));
@@ -86,16 +90,72 @@ export default function ToDoList() {
       taskTitle: "",
       taskDetails: "",
     });
+
+    showHideToast("Task added successfully.");
   }
 
-  const showTasks = tasks.filter((t) => {
-    if (activeFilter == "all") return t;
-    else if (activeFilter == "completed") return t.isCompleted == true;
-    else if (activeFilter == "pending") return t.isCompleted == false;
-  });
+  const showTasks = useMemo(() => {
+    return tasks.filter((t) => {
+      if (activeFilter == "all") return true;
+      else if (activeFilter == "completed") return t.isCompleted;
+      else if (activeFilter == "pending") return !t.isCompleted;
+    });
+  }, [tasks, activeFilter]);
+
+  function handleDeleteClick(todo) {
+    setPopupTodo(todo);
+    setShowDeletePopup(true);
+  }
+
+  function handleDeletePopupClose() {
+    setShowDeletePopup(false);
+  }
+
+  function handleDeleteConfirm() {
+    const updatedTodos = tasks.filter((t) => t.id != popupTodo.id);
+    setTimeout(() => setTasks(updatedTodos), 250);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showHideToast("Task deleted successfully.");
+  }
+
+  function handleEditClick(todo) {
+    setPopupTodo(todo);
+    setShowEditPopup(true);
+  }
+
+  function handleEditPopupClose() {
+    setShowEditPopup(false);
+  }
+
+  function handleEditConfirm(newTitle, newDetails) {
+    const updatedTodos = tasks.map((t) => {
+      if (t.id == popupTodo.id) {
+        t.title = newTitle;
+        t.details = newDetails;
+      }
+      return t;
+    });
+    setTasks(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showHideToast("Task updated successfully.");
+  }
 
   return (
     <>
+      <DeletingPopup
+        isVisible={showDeletePopup}
+        onClose={handleDeletePopupClose}
+        onConfirm={handleDeleteConfirm}
+      />
+
+      <EditingPopup
+        title={popupTodo?.title || ""}
+        details={popupTodo?.details || ""}
+        isVisible={showEditPopup}
+        onClose={handleEditPopupClose}
+        onConfirm={handleEditConfirm}
+      />
+
       <div className="main-container">
         <h1>My Tasks</h1>
         <hr />
@@ -140,7 +200,14 @@ export default function ToDoList() {
               </Alerting>
             </Stack>
           ) : (
-            showTasks.map((t) => <Task key={t.id} todo={t} />)
+            showTasks.map((t) => (
+              <Task
+                key={t.id}
+                todo={t}
+                showDelete={handleDeleteClick}
+                showEdit={handleEditClick}
+              />
+            ))
           )}
         </div>
         <hr />
@@ -255,7 +322,14 @@ export default function ToDoList() {
                   },
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleAddTaskBtn();
+                  if (e.key === "Enter") {
+                    if (
+                      formInputs.taskTitle.trim() !== "" &&
+                      formInputs.taskDetails.trim() !== ""
+                    ) {
+                      handleAddTaskBtn();
+                    }
+                  }
                 }}
               />
             </Box>

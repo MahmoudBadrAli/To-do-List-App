@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import ToDoList from "./components/ToDoList";
 import { TodosContext } from "./contexts/TodosContext";
+import { ToastProvider } from "./contexts/ToastContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -21,9 +22,11 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <TodosContext.Provider value={{ tasks, setTasks }}>
-          <ToDoList />
-        </TodosContext.Provider>
+        <ToastProvider>
+          <TodosContext.Provider value={{ tasks, setTasks }}>
+            <ToDoList />
+          </TodosContext.Provider>
+        </ToastProvider>
       </ThemeProvider>
     </>
   );

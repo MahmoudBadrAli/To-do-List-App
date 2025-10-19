@@ -1,10 +1,8 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { TodosContext } from "../contexts/TodosContext";
+import { useToast } from "../contexts/ToastContext";
 
 import "../styles/Task.scss";
-
-import EditingPopup from "./EditingPopup";
-import DeletingPopup from "./DeletingPopup";
 
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
@@ -27,74 +25,38 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function Task({ todo }) {
+export default function Task({ todo, showDelete, showEdit }) {
   const { tasks, setTasks } = useContext(TodosContext);
-
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [showEditPopup, setShowEditPopup] = useState(false);
+  const { showHideToast } = useToast();
 
   function handleCheckClick() {
-    const updatedTodos = tasks.map((t) => {
-      if (t.id == todo.id) t.isCompleted = !t.isCompleted;
-      return t;
-    });
-    setTasks(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-  }
-
-  function handleDeleteClick() {
-    setShowDeletePopup(true);
-  }
-
-  function handleDeletePopupClose() {
-    setShowDeletePopup(false);
-  }
-
-  function handleDeleteConfirm() {
-    const updatedTodos = tasks.filter((t) => t.id != todo.id);
-    setTimeout(() => setTasks(updatedTodos), 250);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-  }
-
-  function handleEditClick() {
-    setShowEditPopup(true);
-  }
-
-  function handleEditPopupClose() {
-    setShowEditPopup(false);
-  }
-
-  function handleEditConfirm(newTitle, newDetails) {
+    let message = "";
     const updatedTodos = tasks.map((t) => {
       if (t.id == todo.id) {
-        t.title = newTitle;
-        t.details = newDetails;
+        if (t.isCompleted) {
+          t.isCompleted = false;
+          message = "Task marked as pending";
+        } else {
+          t.isCompleted = true;
+          message = "Task marked as completed";
+        }
       }
       return t;
     });
     setTasks(updatedTodos);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showHideToast(`${message}.`);
   }
 
   return (
     <>
-      <DeletingPopup
-        isVisible={showDeletePopup}
-        onClose={handleDeletePopupClose}
-        onConfirm={handleDeleteConfirm}
-      />
-      <EditingPopup
-        title={todo.title}
-        details={todo.details}
-        isVisible={showEditPopup}
-        onClose={handleEditPopupClose}
-        onConfirm={handleEditConfirm}
-      />
       <div className={"task"}>
         <div className="task-title">
           <span
             className="title"
-            style={{ textDecoration: todo.isCompleted ? "line-through" : "none" }}
+            style={{
+              textDecoration: todo.isCompleted ? "line-through" : "none",
+            }}
           >
             {todo.title}
           </span>
@@ -152,7 +114,7 @@ export default function Task({ todo }) {
               transition: { timeout: 600 },
             }}
           >
-            <EditIcon onClick={handleEditClick} />
+            <EditIcon onClick={() => showEdit(todo)} />
           </BootstrapTooltip>
 
           <BootstrapTooltip
@@ -166,7 +128,7 @@ export default function Task({ todo }) {
               transition: { timeout: 600 },
             }}
           >
-            <DeleteOutlineIcon onClick={handleDeleteClick} />
+            <DeleteOutlineIcon onClick={() => showDelete(todo)} />
           </BootstrapTooltip>
         </div>
       </div>
