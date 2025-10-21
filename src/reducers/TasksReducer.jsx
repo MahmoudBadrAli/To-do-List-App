@@ -31,12 +31,8 @@ export default function TasksReducer(currentTaks, action) {
     }
     case "get": {
       const storageTodos = JSON.parse(localStorage.getItem("todos"));
-      if (storageTodos) return storageTodos;
-
-      const storageFilter = JSON.parse(localStorage.getItem("filter"));
-      if (storageFilter) return storageFilter;
+      return Array.isArray(storageTodos) ? storageTodos : [];
     }
-    // eslint-disable-next-line no-fallthrough
     case "checkStatus": {
       const updatedTodos = currentTaks.map((t) => {
         if (t.id == action.payload.id) {
