@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTasks } from "../contexts/TodosContext";
 import { useToast } from "../contexts/ToastContext";
-import TasksReducer from "../reducers/TasksReducer";
 
 import "../styles/ToDoList.scss";
 
