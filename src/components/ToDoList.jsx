@@ -1,6 +1,7 @@
-import { useState, useContext, useEffect, useMemo, useRef } from "react";
-import { TodosContext } from "../contexts/TodosContext";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { useTasks } from "../contexts/TodosContext";
 import { useToast } from "../contexts/ToastContext";
+import TasksReducer from "../reducers/TasksReducer";
 
 import "../styles/ToDoList.scss";
 
@@ -21,8 +22,6 @@ import Fade from "@mui/material/Fade";
 
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-import { v4 as uuidv4 } from "uuid";
-
 import DeletingPopup from "./DeletingPopup";
 import EditingPopup from "./EditingPopup";
 
@@ -38,9 +37,27 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
   },
 }));
 
+const emptyListMessages = [
+  "No tasks? That’s suspicious! 👀",
+  "All done? You’re unstoppable! 💪",
+  "Nothing to do? Take a nap, you earned it 😴",
+  "No tasks… are you sure you’re okay? 😅",
+  "Empty list, full peace of mind 🌿",
+  "All clear! You’re basically a productivity ninja 🗡️",
+  "Tasks? Never heard of them 😎",
+  "You’re free! Go touch some grass 🌱",
+  "Zero tasks — zero stress 💆‍♂️",
+  "Did you just finish everything?! Teach me your ways 🙌",
+  "An empty list today, a fresh start tomorrow 🌅",
+  "Every big goal starts with one small task ✨",
+  "You’ve earned your break — go celebrate 🎉",
+  "Peace, calm, and no tasks in sight 🕊️",
+  "Enjoy the quiet before the next storm of productivity ☕",
+];
+
 export default function ToDoList() {
   const theme = useTheme();
-  const { tasks, setTasks } = useContext(TodosContext);
+  const { tasks, dispatch } = useTasks();
   const { showHideToast } = useToast();
   const [formInputs, setFormInputs] = useState({
     taskTitle: "",
@@ -53,45 +70,46 @@ export default function ToDoList() {
   const [popupTodo, setPopupTodo] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showEditPopup, setShowEditPopup] = useState(false);
+  const [emptyMessage, setEmptyMessage] = useState("");
 
   useEffect(() => {
     localStorage.setItem("filter", JSON.stringify(activeFilter));
   }, [activeFilter]);
 
   useEffect(() => {
-    const storageTodos = JSON.parse(localStorage.getItem("todos"));
-    if (storageTodos) setTasks(storageTodos);
-
-    const storageFilter = JSON.parse(localStorage.getItem("filter"));
-    if (storageFilter) setActiveFilter(storageFilter);
+    dispatch({ type: "get" });
+    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (tasks.length === 0)
+      setEmptyMessage(
+        emptyListMessages[Math.floor(Math.random() * emptyListMessages.length)]
+      );
+  }, [tasks.length]);
 
   function handleAddTaskBtn() {
     if (
       formInputs.taskTitle.trim() == "" &&
       formInputs.taskDetails.trim() == ""
-    )
+    ) {
       return;
-
-    const newTodo = {
-      id: uuidv4(),
-      title: formInputs.taskTitle,
-      details: formInputs.taskDetails,
-      isCompleted: false,
-    };
-
-    const updatedTodos = [...tasks, newTodo];
-
-    setTasks(updatedTodos);
-
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-
-    setFormInputs({
-      taskTitle: "",
-      taskDetails: "",
-    });
-
-    showHideToast("Task added successfully.");
+    } else {
+      dispatch({
+        type: "added",
+        payload: {
+          formInputs: {
+            taskTitle: formInputs.taskTitle,
+            taskDetails: formInputs.taskDetails,
+          },
+        },
+      });
+      setFormInputs({
+        taskTitle: "",
+        taskDetails: "",
+      });
+      showHideToast("Task added successfully.");
+    }
   }
 
   const showTasks = useMemo(() => {
@@ -112,9 +130,12 @@ export default function ToDoList() {
   }
 
   function handleDeleteConfirm() {
-    const updatedTodos = tasks.filter((t) => t.id != popupTodo.id);
-    setTimeout(() => setTasks(updatedTodos), 250);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    dispatch({
+      type: "deleted",
+      payload: {
+        id: popupTodo.id,
+      },
+    });
     showHideToast("Task deleted successfully.");
   }
 
@@ -128,15 +149,14 @@ export default function ToDoList() {
   }
 
   function handleEditConfirm(newTitle, newDetails) {
-    const updatedTodos = tasks.map((t) => {
-      if (t.id == popupTodo.id) {
-        t.title = newTitle;
-        t.details = newDetails;
-      }
-      return t;
+    dispatch({
+      type: "updated",
+      payload: {
+        id: popupTodo.id,
+        newTitle: newTitle,
+        newDetails: newDetails,
+      },
     });
-    setTasks(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     showHideToast("Task updated successfully.");
   }
 
@@ -190,13 +210,15 @@ export default function ToDoList() {
             >
               <Alerting
                 severity="info"
+                icon={false}
                 sx={{
                   fontSize: "25px",
                   width: "fit-content",
+                  backgroundColor: "#03a9f4",
                   "& .MuiAlert-icon": { fontSize: "36px" },
                 }}
               >
-                <p>No tasks? That’s suspicious!</p>
+                <p>{emptyMessage}</p>
               </Alerting>
             </Stack>
           ) : (

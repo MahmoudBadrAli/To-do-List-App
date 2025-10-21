@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { TodosContext } from "../contexts/TodosContext";
+import { useTasks } from "../contexts/TodosContext";
 import { useToast } from "../contexts/ToastContext";
 
 import "../styles/Task.scss";
@@ -26,26 +25,20 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 }));
 
 export default function Task({ todo, showDelete, showEdit }) {
-  const { tasks, setTasks } = useContext(TodosContext);
+  const { dispatch } = useTasks();
   const { showHideToast } = useToast();
 
   function handleCheckClick() {
-    let message = "";
-    const updatedTodos = tasks.map((t) => {
-      if (t.id == todo.id) {
-        if (t.isCompleted) {
-          t.isCompleted = false;
-          message = "Task marked as pending";
-        } else {
-          t.isCompleted = true;
-          message = "Task marked as completed";
-        }
-      }
-      return t;
+    const message = todo.isCompleted
+      ? "Task marked as pending"
+      : "Task marked as completed";
+    dispatch({
+      type: "checkStatus",
+      payload: {
+        id: todo.id,
+      },
     });
-    setTasks(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-    showHideToast(`${message}.`);
+    showHideToast(message + ".");
   }
 
   return (
