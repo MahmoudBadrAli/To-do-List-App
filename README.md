@@ -3,7 +3,7 @@
 A simple and elegant **To-Do List App** built with **React + Vite**.  
 It allows users to create, edit, and manage their daily tasks easily with a clean user interface.
 
-🌐 **Live Demo:** [mahmoudbadr-todo.netlify.app](https://mahmoudbadr-todo.netlify.app)
+🌐 **Live Demo:** [To-Do List App](https://mahmoudbadr-todo.netlify.app)
 
 ---
 
